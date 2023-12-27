@@ -20,7 +20,7 @@ in
           VERSION = "1.20.2";
           EULA = "true";
         };
-        extraOpts = [ ("--memory=" + builtins.toJSON (builtins.floor (MemTotalKB*(1.75))) + "k") ];
+        extraOptions = [ ("--memory=" + builtins.toJSON (builtins.floor (MemTotalKB*(0.85))) + "k") ];
       };
     };
   };

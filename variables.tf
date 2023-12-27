@@ -13,17 +13,14 @@ variable "ds_token" {
 variable "ds_domain" {
   description = "Desec domain to use"
   type = string
-  default = "ldryt.dev"
 }
 
-variable "mc_node-server_type" {
+variable "mcn_type" {
   description = "Hetzner Cloud server type"
   type = string
-  default = "ccx23"
 }
 
-variable "mc_node-datacenter" {
-  description = "Hetzner Cloud datacenter"
+variable "mcn_datacenter" {
+  description = "Hetzner Cloud datacenter name"
   type = string
-  default = "nbg1-dc3"
 }

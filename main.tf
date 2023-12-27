@@ -2,8 +2,8 @@ locals {
   deploy_date = replace(timestamp(), ":", "-")
 }
 
-resource "hcloud_firewall" "mc_node-firewall" {
-  name = "mc-node"
+resource "hcloud_firewall" "mcn_firewall" {
+  name = "mcn"
   rule {
     direction = "in"
     protocol = "icmp"
@@ -23,37 +23,37 @@ resource "hcloud_firewall" "mc_node-firewall" {
   }
 }
 
-resource "hcloud_ssh_key" "mc_node-ssh_key" {
-  name = "mc-node"
+resource "hcloud_ssh_key" "mcn_ssh_key" {
+  name = "mcn"
   public_key = file("./mc.key.pub")
 }
 
-resource "hcloud_primary_ip" "mc_node-ip4" {
-  name = "mc-node"
-  datacenter = var.mc_node-datacenter
+resource "hcloud_primary_ip" "mcn_ip4" {
+  name = "mcn"
+  datacenter = var.mcn_datacenter
   type = "ipv4"
   assignee_type = "server"
   auto_delete = false
 }
 
-resource "desec_rrset" "mc_node-record" {
+resource "desec_rrset" "mcn_record" {
   domain = var.ds_domain
   subname = "mc"
   type = "A"
-  records = [ hcloud_primary_ip.mc_node-ip4.ip_address ]
+  records = [ hcloud_primary_ip.mcn_ip4.ip_address ]
   ttl = 3600
 }
 
-resource "hcloud_server" "mc_node" {
-  name = "${format("%s-%s", "mc-node", local.deploy_date)}"
+resource "hcloud_server" "mcn" {
+  name = "${format("%s-%s", "mcn", local.deploy_date)}"
   image = "debian-11"
-  server_type = var.mc_node-server_type
-  datacenter = var.mc_node-datacenter
-  ssh_keys = [ "mc-node" ]
-  firewall_ids = [ hcloud_firewall.mc_node-firewall.id ]
+  server_type = var.mcn_type
+  datacenter = var.mcn_datacenter
+  ssh_keys = [ "mcn" ]
+  firewall_ids = [ hcloud_firewall.mcn_firewall.id ]
   public_net {
     ipv6_enabled = false
-    ipv4 = hcloud_primary_ip.mc_node-ip4.id
+    ipv4 = hcloud_primary_ip.mcn_ip4.id
   }
   user_data = file("./cloud-init.yml")
 }

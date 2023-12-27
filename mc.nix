@@ -1,19 +1,23 @@
 { config, pkgs, ... }:
 {
   networking.firewall.enable = false; # Hetzner's firewall is in use
-  nixpkgs.config.allowUnfree = true;
-  services.minecraft-server = {
-    enable = true;
-    declarative = true;
-    eula = true;
-    jvmOpts = "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing -XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10";
-    serverProperties = {
-      server-port = 25565;
-      difficulty = "hard";
-      gamemode = "survival";
-      max-players = 5;
-      motd = "yay!";
-      enable-rcon = false;
+
+  virtualisation.podman.enable = true;
+  virtualisation.oci-containers = {
+    backend = "podman";
+    containers = {
+      mc = {
+        image = "ghcr.io/itzg/minecraft-server@sha256:2adc322f52549917a99f0d6e851c2e3d5893dd5f4a38e9e2420c5cbee486a476";
+        ports = [ "25565:25565" ];
+        volumes = [ "mc_data:/data" ];
+        environment = {
+          MEMORY = "";
+          JVM_XX_OPTS = "-XX:MaxRAMPercentage=75";
+          USE_AIKAR_FLAGS = "true"; # https://docs.papermc.io/paper/aikars-flags
+          VERSION = "1.20.2";
+          EULA = "true";
+        };
+      };
     };
   };
 }

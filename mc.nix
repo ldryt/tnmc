@@ -1,4 +1,7 @@
 { config, pkgs, ... }:
+let 
+  MemTotalKB = builtins.fromJSON (builtins.readFile "/var/MemTotalKB");
+in
 {
   networking.firewall.enable = false; # Hetzner's firewall is in use
 
@@ -17,6 +20,7 @@
           VERSION = "1.20.2";
           EULA = "true";
         };
+        extraOpts = [ ("--memory=" + builtins.toJSON (builtins.floor (MemTotalKB*(1.75))) + "k") ];
       };
     };
   };

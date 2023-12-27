@@ -14,13 +14,11 @@ in
         ports = [ "25565:25565" ];
         volumes = [ "mc_data:/data" ];
         environment = {
-          MEMORY = "";
-          JVM_XX_OPTS = "-XX:MaxRAMPercentage=75";
+          MEMORY = (builtins.toJSON (builtins.floor (MemTotalKB*(0.85))) + "k");
           USE_AIKAR_FLAGS = "true"; # https://docs.papermc.io/paper/aikars-flags
           VERSION = "1.20.2";
           EULA = "true";
         };
-        extraOptions = [ ("--memory=" + builtins.toJSON (builtins.floor (MemTotalKB*(0.85))) + "k") ];
       };
     };
   };

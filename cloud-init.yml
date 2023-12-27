@@ -1,7 +1,7 @@
 #cloud-config
 
 runcmd:
-  - grep MemTotal /proc/meminfo | awk '{print $2}' > /var/MemTotalKB
   - mkdir /etc/nixos
+  - grep MemTotal /proc/meminfo | awk '{print $2}' > /etc/nixos/MemTotalKB
   - curl https://raw.githubusercontent.com/ldryt/tnmc/main/mc.nix > /etc/nixos/mc.nix
   - curl https://raw.githubusercontent.com/elitak/nixos-infect/6a72f0bff6a26b4d1ce0c7c71cb2f10ca3384228/nixos-infect | PROVIDER=hetznercloud NIX_CHANNEL=nixos-23.11 NIXOS_IMPORT=./mc.nix bash 2>&1 | tee /tmp/infect.log

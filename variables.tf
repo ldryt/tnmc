@@ -4,14 +4,14 @@ variable "hc_token" {
   sensitive = true
 }
 
-variable "ds_token" {
-  description = "Desec account API token"
+variable "gd_token" {
+  description = "Gandi API token"
   type = string
   sensitive = true
 }
 
-variable "ds_domain" {
-  description = "Desec domain to use"
+variable "gd_domain" {
+  description = "Gandi domain to use"
   type = string
 }
 

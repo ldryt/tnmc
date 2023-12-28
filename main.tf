@@ -36,14 +36,6 @@ resource "hcloud_primary_ip" "mcn_ip4" {
   auto_delete = false
 }
 
-resource "desec_rrset" "mcn_record" {
-  domain = var.ds_domain
-  subname = "mc"
-  type = "A"
-  records = [ hcloud_primary_ip.mcn_ip4.ip_address ]
-  ttl = 3600
-}
-
 resource "hcloud_server" "mcn" {
   name = "${format("%s-%s", "mcn", local.deploy_date)}"
   image = "debian-11"
@@ -56,4 +48,16 @@ resource "hcloud_server" "mcn" {
     ipv4 = hcloud_primary_ip.mcn_ip4.id
   }
   user_data = file("./cloud-init.yml")
+}
+
+data "gandi_domain" "mcn_domain" {
+  name = var.gd_domain
+}
+
+resource "gandi_livedns_record" "mc_a_record" {
+  zone = data.gandi_domain.mcn_domain.id
+  name = "mc"
+  type = "A"
+  ttl = 300
+  values = [ hcloud_primary_ip.mcn_ip4.ip_address ]
 }

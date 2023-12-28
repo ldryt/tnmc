@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let 
-  MemTotalKB = builtins.fromJSON (builtins.readFile "/var/MemTotalKB");
+  MemTotalKB = builtins.fromJSON (builtins.readFile "/etc/nixos/MemTotalKB");
 in
 {
   networking.firewall.enable = false; # Hetzner's firewall is in use
